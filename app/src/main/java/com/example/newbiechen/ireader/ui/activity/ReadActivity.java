@@ -521,17 +521,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 }
         );
 
-        mTvBrief.setOnClickListener(
-                (v) -> BookDetailActivity.startActivity(this, mBookId)
-        );
-
-        mTvCommunity.setOnClickListener(
-                (v) -> {
-                    Intent intent = new Intent(this, CommunityActivity.class);
-                    startActivity(intent);
-                }
-        );
-
         mSettingDialog.setOnDismissListener(
                 dialog -> hideSystemBar()
         );
@@ -722,11 +711,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     // 退出
     private void exit() {
-        // 返回给BookDetail。
-        Intent result = new Intent();
-        result.putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected);
-        setResult(Activity.RESULT_OK, result);
-        // 退出
         super.onBackPressed();
     }
 

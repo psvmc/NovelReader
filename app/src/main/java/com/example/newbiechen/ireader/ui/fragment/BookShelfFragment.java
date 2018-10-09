@@ -186,7 +186,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     @Override
     protected void processLogic() {
         super.processLogic();
-        mRvContent.startRefresh();
     }
 
     private void openItemDialog(CollBookBean collBook) {
