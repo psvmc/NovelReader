@@ -12,6 +12,7 @@ import com.example.newbiechen.ireader.widget.RefreshLayout;
 import com.example.newbiechen.ireader.widget.itemdecoration.DividerItemDecoration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,11 +22,12 @@ import butterknife.BindView;
  * 本地书籍
  */
 
-public class LocalBookFragment extends BaseFileFragment{
+public class LocalBookFragment extends BaseFileFragment {
     @BindView(R.id.refresh_layout)
     RefreshLayout mRlRefresh;
     @BindView(R.id.local_book_rv_content)
     RecyclerView mRvContent;
+
     @Override
     protected int getContentId() {
         return R.layout.fragment_local_book;
@@ -37,7 +39,7 @@ public class LocalBookFragment extends BaseFileFragment{
         setUpAdapter();
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
@@ -51,7 +53,7 @@ public class LocalBookFragment extends BaseFileFragment{
                 (view, pos) -> {
                     //如果是已加载的文件，则点击事件无效。
                     String id = mAdapter.getItem(pos).getAbsolutePath();
-                    if (BookRepository.getInstance().getCollBook(id) != null){
+                    if (BookRepository.getInstance().getCollBook(id) != null) {
                         return;
                     }
 
@@ -59,7 +61,7 @@ public class LocalBookFragment extends BaseFileFragment{
                     mAdapter.setCheckedItem(pos);
 
                     //反馈
-                    if (mListener != null){
+                    if (mListener != null) {
                         mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
                     }
                 }
@@ -71,14 +73,20 @@ public class LocalBookFragment extends BaseFileFragment{
         super.processLogic();
         MediaStoreHelper.getAllBookFile(getActivity(),
                 (files) -> {
-                    if (files.isEmpty()){
+                    if (files.isEmpty()) {
                         mRlRefresh.showEmpty();
-                    }
-                    else {
-                        mAdapter.refreshItems(files);
+                    } else {
+                        List<File> tempFiles = new ArrayList<>();
+                        for (int i = 0; i < files.size(); i++) {
+                            File itemFile = files.get(i);
+                            if(!itemFile.getName().contains("log")){
+                                tempFiles.add(itemFile);
+                            }
+                        }
+                        mAdapter.refreshItems(tempFiles);
                         mRlRefresh.showFinish();
                         //反馈
-                        if (mListener != null){
+                        if (mListener != null) {
                             mListener.onCategoryChanged();
                         }
                     }
