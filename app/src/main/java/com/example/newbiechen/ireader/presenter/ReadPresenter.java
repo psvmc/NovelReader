@@ -56,7 +56,6 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                         }
                         ,
                         e -> {
-                            //TODO: Haven't grate conversation method.
                             LogUtils.e(e);
                         }
                 );

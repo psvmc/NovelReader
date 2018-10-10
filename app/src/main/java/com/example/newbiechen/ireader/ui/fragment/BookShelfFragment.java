@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 
@@ -15,8 +14,6 @@ import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.RxBus;
 import com.example.newbiechen.ireader.event.DeleteResponseEvent;
 import com.example.newbiechen.ireader.event.DeleteTaskEvent;
-import com.example.newbiechen.ireader.event.DownloadMessage;
-import com.example.newbiechen.ireader.event.RecommendBookEvent;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.presenter.BookShelfPresenter;
@@ -25,8 +22,6 @@ import com.example.newbiechen.ireader.ui.activity.ReadActivity;
 import com.example.newbiechen.ireader.ui.adapter.CollBookAdapter;
 import com.example.newbiechen.ireader.ui.base.BaseMVPFragment;
 import com.example.newbiechen.ireader.utils.RxUtils;
-import com.example.newbiechen.ireader.utils.ToastUtils;
-import com.example.newbiechen.ireader.widget.adapter.WholeAdapter;
 import com.example.newbiechen.ireader.widget.itemdecoration.DividerItemDecoration;
 import com.example.newbiechen.ireader.widget.refresh.ScrollRefreshRecyclerView;
 

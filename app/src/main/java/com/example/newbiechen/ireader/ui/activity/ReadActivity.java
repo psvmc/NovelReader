@@ -1,6 +1,5 @@
 package com.example.newbiechen.ireader.ui.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -62,10 +61,6 @@ import static android.support.v4.view.ViewCompat.LAYER_TYPE_SOFTWARE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-/**
- * Created by newbiechen on 17-5-16.
- */
-
 public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         implements ReadContract.View {
     private static final String TAG = "ReadActivity";
@@ -109,8 +104,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     TextView mTvCategory;
     @BindView(R.id.read_tv_night_mode)
     TextView mTvNightMode;
-    /*    @BindView(R.id.read_tv_download)
-        TextView mTvDownload;*/
+
     @BindView(R.id.read_tv_setting)
     TextView mTvSetting;
     /***************left slide*******************************/
@@ -218,7 +212,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
         isNightMode = ReadSettingManager.getInstance().isNightMode();
         isFullScreen = ReadSettingManager.getInstance().isFullScreen();
-
         mBookId = mCollBook.get_id();
     }
 
