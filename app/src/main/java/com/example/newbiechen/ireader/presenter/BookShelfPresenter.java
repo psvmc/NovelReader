@@ -59,9 +59,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
             if (collBook.isLocal()) {
                 it.remove();
             } else {
-                observables.add(
-                        RemoteRepository.getInstance().getBookDetail(collBook.get_id())
-                );
+
             }
         }
         if(observables.size() == 0){
