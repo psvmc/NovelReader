@@ -1,6 +1,7 @@
 package com.example.newbiechen.ireader.ui.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected CompositeDisposable mDisposable;
     //ButterKnife
     private Toolbar mToolbar;
+    protected Context mContext;
 
     private Unbinder unbinder;
     /****************************abstract area*************************************/
@@ -79,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentId());
+        mContext = this;
         initData(savedInstanceState);
         unbinder = ButterKnife.bind(this);
         initToolbar();

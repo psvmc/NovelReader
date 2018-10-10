@@ -36,9 +36,9 @@ import io.reactivex.disposables.Disposable;
  * Created by newbiechen on 17-4-15.
  */
 
-public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Presenter>
+public class BookListFragment extends BaseMVPFragment<BookShelfContract.Presenter>
         implements BookShelfContract.View {
-    private static final String TAG = "BookShelfFragment";
+    private static final String TAG = "BookListFragment";
     @BindView(R.id.book_shelf_rv_content)
     ScrollRefreshRecyclerView mRvContent;
 
