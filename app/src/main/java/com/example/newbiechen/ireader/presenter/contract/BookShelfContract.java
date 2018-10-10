@@ -20,8 +20,6 @@ public interface BookShelfContract {
 
     interface Presenter extends BaseContract.BasePresenter<View>{
         void refreshCollBooks();
-        void createDownloadTask(CollBookBean collBookBean);
         void updateCollBooks(List<CollBookBean> collBookBeans);
-        void loadRecommendBooks(String gender);
     }
 }

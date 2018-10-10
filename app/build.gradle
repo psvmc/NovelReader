@@ -71,8 +71,7 @@ dependencies {
     implementation "org.greenrobot:greendao:$rootProject.greendaoVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
 
-    // OpenCC to convert Simp. Chinese to Trad. Chinese
-    //implementation "com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar"
+    implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     implementation(name:'lib-opencc-android-0.8.0', ext:'aar')
     // AndroidTagGroup
     implementation 'me.gujun.android.taggroup:library:1.4@aar'

@@ -56,9 +56,8 @@ public class MainActivity extends BaseTabActivity{
     @Override
     protected void setUpToolbar(Toolbar toolbar) {
         super.setUpToolbar(toolbar);
-        toolbar.setLogo(R.mipmap.logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("星火阅读");
     }
 
     @Override

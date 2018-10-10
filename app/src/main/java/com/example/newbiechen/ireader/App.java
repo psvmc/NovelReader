@@ -18,12 +18,12 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        startService(new Intent(getContext(), DownloadService.class));
+        //startService(new Intent(getContext(), DownloadService.class));
 
         // 初始化内存分析工具
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
+//        if (!LeakCanary.isInAnalyzerProcess(this)) {
+//            LeakCanary.install(this);
+//        }
     }
 
     public static Context getContext(){

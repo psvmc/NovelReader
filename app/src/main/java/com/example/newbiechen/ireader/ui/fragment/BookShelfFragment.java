@@ -49,7 +49,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
 
     /************************************/
     private CollBookAdapter mCollBookAdapter;
-    private FooterItemView mFooterItem;
 
     //是否是第一次进入
     private boolean isInit = true;
@@ -81,27 +80,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     @Override
     protected void initClick() {
         super.initClick();
-        //推荐书籍
-        Disposable recommendDisp = RxBus.getInstance()
-                .toObservable(RecommendBookEvent.class)
-                .subscribe(
-                        event -> {
-                            mRvContent.startRefresh();
-                            mPresenter.loadRecommendBooks(event.sex);
-                        }
-                );
-        addDisposable(recommendDisp);
 
-        Disposable donwloadDisp = RxBus.getInstance()
-                .toObservable(DownloadMessage.class)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        event -> {
-                            //使用Toast提示
-                            ToastUtils.show(event.message);
-                        }
-                );
-        addDisposable(donwloadDisp);
 
         //删除书籍 (写的丑了点)
         Disposable deleteDisp = RxBus.getInstance()
@@ -149,8 +128,11 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                         File file = new File(path);
                         //判断这个本地文件是否存在
                         if (file.exists() && file.length() != 0) {
-                            ReadActivity.startActivity(getContext(),
-                                    mCollBookAdapter.getItem(pos), true);
+                            ReadActivity.startActivity(
+                                    getContext(),
+                                    mCollBookAdapter.getItem(pos),
+                                    true
+                            );
                         } else {
                             String tip = getContext().getString(R.string.nb_bookshelf_book_not_exist);
                             //提示(从目录中移除这个文件)
@@ -232,8 +214,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     }
 
     private void downloadBook(CollBookBean collBook) {
-        //创建任务
-        mPresenter.createDownloadTask(collBook);
+
     }
 
     /**
@@ -290,11 +271,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
 
     @Override
     public void complete() {
-        if (mCollBookAdapter.getItemCount() > 0 && mFooterItem == null) {
-            mFooterItem = new FooterItemView();
-            mCollBookAdapter.addFooterView(mFooterItem);
-        }
-
         if (mRvContent.isRefreshing()) {
             mRvContent.finishRefresh();
         }
@@ -325,24 +301,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         mRvContent.showTip();
     }
 
-    /*****************************************************************/
-    class FooterItemView implements WholeAdapter.ItemView {
-        @Override
-        public View onCreateView(ViewGroup parent) {
-            View view = LayoutInflater.from(getContext())
-                    .inflate(R.layout.footer_book_shelf, parent, false);
-            view.setOnClickListener(
-                    (v) -> {
-                        //设置RxBus回调
-                    }
-            );
-            return view;
-        }
-
-        @Override
-        public void onBindView(View view) {
-        }
-    }
 
     @Override
     public void onResume() {
