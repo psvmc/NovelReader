@@ -28,7 +28,7 @@ import com.example.newbiechen.ireader.model.gen.CollBookBeanDao;
  * 收藏的书籍
  */
 @Entity
-public class CollBookBean implements Parcelable{
+public class  CollBookBean implements Parcelable{
 
     public static final int STATUS_UNCACHE = 0; //未缓存
     public static final int STATUS_CACHING = 1; //正在缓存

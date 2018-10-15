@@ -24,7 +24,6 @@ import com.example.newbiechen.ireader.utils.StringUtils;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,18 +124,18 @@ public abstract class PageLoader {
     //字体的大小
     private int mTextSize;
     //行间距
-    private int mTextInterval;
+    private int mTextLineSpacing;
     //标题的行间距
-    private int mTitleInterval;
+    private int mTitleLineSpacing;
     //段落距离(基于行间距的额外距离)
-    private int mTextPara;
-    private int mTitlePara;
+    private int mTextSectionSpacing;
+    private int mTitleSectionSpacing;
     //电池的百分比
     private int mBatteryLevel;
     //当前页面的背景
     private int mBgColor;
 
-    // 当前章
+    //当前章
     protected int mCurChapterPos = 0;
     //上一章的记录
     private int mLastChapterPos = 0;
@@ -181,11 +180,11 @@ public abstract class PageLoader {
         mTextSize = textSize;
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
-        mTextInterval = mTextSize / 2;
-        mTitleInterval = mTitleSize / 2;
+        mTextLineSpacing = mTextSize / 2;
+        mTitleLineSpacing = mTitleSize / 2;
         // 段落间距(大小为字体的高度)
-        mTextPara = mTextSize;
-        mTitlePara = mTitleSize;
+        mTextSectionSpacing = mTextSize;
+        mTitleSectionSpacing = mTitleSize;
     }
 
     private void initPaint() {
@@ -760,7 +759,6 @@ public abstract class PageLoader {
         }
 
         /******绘制电池********/
-
         int visibleRight = mDisplayWidth - mMarginWidth;
         int visibleBottom = mDisplayHeight - tipMarginHeight;
 
@@ -856,10 +854,10 @@ public abstract class PageLoader {
             }
 
             //设置总距离
-            int interval = mTextInterval + (int) mTextPaint.getTextSize();
-            int para = mTextPara + (int) mTextPaint.getTextSize();
-            int titleInterval = mTitleInterval + (int) mTitlePaint.getTextSize();
-            int titlePara = mTitlePara + (int) mTextPaint.getTextSize();
+            int interval = mTextLineSpacing + (int) mTextPaint.getTextSize();
+            int para = mTextSectionSpacing + (int) mTextPaint.getTextSize();
+            int titleInterval = mTitleLineSpacing + (int) mTitlePaint.getTextSize();
+            int titlePara = mTitleSectionSpacing + (int) mTextPaint.getTextSize();
             String str = null;
 
             //对标题进行绘制
@@ -868,7 +866,7 @@ public abstract class PageLoader {
 
                 //设置顶部间距
                 if (i == 0) {
-                    top += mTitlePara;
+                    top += mTitleSectionSpacing;
                 }
 
                 //计算文字显示的起始点
@@ -1237,26 +1235,27 @@ public abstract class PageLoader {
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight;
         int titleLinesCount = 0;
-        boolean showTitle = true; // 是否展示标题
+        boolean isTitle = true; // 是否展示标题
         String paragraph = chapter.getTitle();//默认展示标题
         try {
-            while (showTitle || (paragraph = br.readLine()) != null) {
+            while (isTitle || (paragraph = br.readLine()) != null) {
                 paragraph = StringUtils.convertCC(paragraph, mContext);
                 // 重置段落
-                if (!showTitle) {
+                if (!isTitle) {
                     paragraph = paragraph.replaceAll("\\s", "");
                     // 如果只有换行符，那么就不执行
                     if (paragraph.equals("")) continue;
+                    //半角转全角 段落前添加两个字符
                     paragraph = StringUtils.halfToFull("  " + paragraph + "\n");
                 } else {
                     //设置 title 的顶部间距
-                    rHeight -= mTitlePara;
+                    rHeight -= mTitleSectionSpacing;
                 }
                 int wordCount = 0;
                 String subStr = null;
                 while (paragraph.length() > 0) {
                     //当前空间，是否容得下一行文字
-                    if (showTitle) {
+                    if (isTitle) {
                         rHeight -= mTitlePaint.getTextSize();
                     } else {
                         rHeight -= mTextPaint.getTextSize();
@@ -1278,13 +1277,21 @@ public abstract class PageLoader {
                         continue;
                     }
 
-                    //测量一行占用的字节数
-                    if (showTitle) {
-                        wordCount = mTitlePaint.breakText(paragraph,
-                                true, mVisibleWidth, null);
+                    //测量一行能放多少字
+                    if (isTitle) {
+                        wordCount = mTitlePaint.breakText(
+                                paragraph,
+                                true,
+                                mVisibleWidth,
+                                null
+                        );
                     } else {
-                        wordCount = mTextPaint.breakText(paragraph,
-                                true, mVisibleWidth, null);
+                        wordCount = mTextPaint.breakText(
+                                paragraph,
+                                true,
+                                mVisibleWidth,
+                                null
+                        );
                     }
 
                     subStr = paragraph.substring(0, wordCount);
@@ -1293,11 +1300,11 @@ public abstract class PageLoader {
                         lines.add(subStr);
 
                         //设置段落间距
-                        if (showTitle) {
+                        if (isTitle) {
                             titleLinesCount += 1;
-                            rHeight -= mTitleInterval;
+                            rHeight -= mTitleLineSpacing;
                         } else {
-                            rHeight -= mTextInterval;
+                            rHeight -= mTextLineSpacing;
                         }
                     }
                     //裁剪
@@ -1305,13 +1312,13 @@ public abstract class PageLoader {
                 }
 
                 //增加段落的间距
-                if (!showTitle && lines.size() != 0) {
-                    rHeight = rHeight - mTextPara + mTextInterval;
+                if (!isTitle && lines.size() != 0) {
+                    rHeight = rHeight - mTextSectionSpacing + mTextLineSpacing;
                 }
 
-                if (showTitle) {
-                    rHeight = rHeight - mTitlePara + mTitleInterval;
-                    showTitle = false;
+                if (isTitle) {
+                    rHeight = rHeight - mTitleSectionSpacing + mTitleLineSpacing;
+                    isTitle = false;
                 }
             }
 
